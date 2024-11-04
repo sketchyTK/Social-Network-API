@@ -7,68 +7,32 @@ interface IUser extends Document {
     friends: Schema.Types.ObjectId[];
 }
 
-interface Ithought extends Document {
-    thoughtText: string,
-    createdAt: Date,
-    username: string,
-    formattedCreatedAt: string;
-    reactions: Schema.Types.ObjectId[]
-}
-
-interface Ireaction extends Document {
-    reactionId: Schema.Types.ObjectId,
-    reactionBody: string,
-    username: string,
-    createdAt: Date
-}
-
-const thoughtSchema = new Schema<Ithought>(
-    {
-        thoughtText: {
-            type: String,
-            required: true,
-            minlength: 1,
-            maxlength: 280,
-        },
-        username: {
-            type: String,
-            required: true,
-        },
-        createdAt: {
-            type: Date,
-            default: Date.now,
-        }, 
-        
-        reactions: [{
-            type: Schema.Types.ObjectId,
-            ref: 'reactions',
-            }]
-    },
-        { 
-            toJSON: { getters: true }, 
-            toObject: { getters: true },
-});
-
-thoughtSchema.virtual('formattedCreatedAt').get(function (this: Ithought) {
-    return this.createdAt.toLocaleString(); // Format the date as needed
-});
-
 const userSchema = new Schema<IUser>(
     {
         username: {
             type: String,
             required: true,
             max_length: 50,
+            trim: true,
+            unique: true,
         },
         email: {
             type: String,
             required: true,
             max_length: 50,
+            trim: true,
+            unique: true,
         },
-        thoughts: [{
+        thoughts: [ 
+            {
             type: Schema.Types.ObjectId,
-            ref: 'thought',
-            }]
+            ref: 'thoughts',
+            }
+        ],
+        friends: [{
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+        }],
     },
       {
         toJSON: {
