@@ -65,3 +65,51 @@ export const deleteUser = async (req: Request, res: Response) => {
         return;
     }
 }
+
+export const addFriend = async (req: Request, res: Response) => {
+    try {
+        const user1 = await User.findOneAndUpdate(
+            {_id: req.params.userId},
+            {$addToSet : { friends: req.body.friendId} },
+            {runValidators: true, new: true}
+        );
+        const user2 = await User.findOneAndUpdate(
+            { _id: req.body.friendId },
+            { $addToSet: { friends: req.params.userId } },
+            { runValidators: true, new: true }
+        );
+        if (!user1 || !user2) {
+            res.status(404).json({ message: 'Invalid User Ids'});
+        }
+        else {
+            res.status(200).json({message: 'Friend added.'});
+        }
+    }
+    catch (err) {
+        res.status(500).json(err);
+    }
+}
+
+export const deleteFriend = async (req: Request, res: Response) => {
+    try {
+        const user1 = await User.findOneAndUpdate(
+            {_id: req.params.userId},
+            {$pull : { friends: req.params.friendId} },
+            {runValidators: true, new: true}
+        );
+        const user2 = await User.findOneAndUpdate(
+            { _id: req.params.friendId },
+            { $pull: { friends: req.params.userId } },
+            { runValidators: true, new: true }
+        );
+        if (!user1 || !user2) {
+            res.status(404).json({ message: 'Invalid User Ids'});
+        }
+        else {
+            res.status(200).json({message: 'Friend removed.'});
+        }
+    }
+    catch (err) {
+        res.status(500).json(err);
+    }
+}
