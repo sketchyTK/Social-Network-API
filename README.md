@@ -16,6 +16,6 @@ Application can only be used locally on a device with a Mongo DB, using Node.JS,
 
 ## Links<a id="links"></a>
 
-Walkthrough Video - https://krazy-kanban-board-project.onrender.com/
+Walkthrough Video - https://drive.google.com/file/d/1I3Xa6EI5sxH0_PARJZuzQVFk7ruwb5JY/view?usp=sharing
 
 Github Repository - https://github.com/sketchyTK/Social-Network-API
